@@ -77,7 +77,7 @@ public class Broadcaster {
 									return;
 								}
 								final StringBuilder talkSB = new StringBuilder();
-								final SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+								final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 								talkSB.append(sdf.format(talker.getOccectTime())).append(" ");
 								talkSB.append(talker.getAuthor()).append(">>");
 								talkSB.append(talker.getWords());
