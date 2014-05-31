@@ -70,4 +70,22 @@ public class NChatStringUtils {
 		return StringUtils.split(words);
 	}
 	
+	/**
+	 * 只要strs中有任何一个包含了str，返回true，否则返回false
+	 * @param str
+	 * @param strs
+	 * @return
+	 */
+	public static boolean equalsIgnoreCaseIn(String str, String... strs) {
+		if( null == strs ) {
+			return false;
+		}
+		for( String s : strs ) {
+			if( StringUtils.equalsIgnoreCase(str, s) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

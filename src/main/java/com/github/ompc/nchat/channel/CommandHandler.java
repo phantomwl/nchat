@@ -10,7 +10,6 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.util.Collection;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,19 +63,19 @@ public class CommandHandler extends ChannelInboundHandlerAdapter {
 		final Channel channel = ctx.channel();
 		
 		// quit
-		if( StringUtils.equalsIgnoreCase(cmdOps[0], "/q") ) {
+		if( NChatStringUtils.equalsIgnoreCaseIn(cmdOps[0], "/q", "/quit") ) {
 			channel.writeAndFlush("Goodbye sir.\n").sync();
 			ctx.channel().close();
 		} 
 		
 		// who
-		else if( StringUtils.equalsIgnoreCase(cmdOps[0], "/w") ) {
+		else if( NChatStringUtils.equalsIgnoreCaseIn(cmdOps[0], "/w", "/who") ) {
 			final String who = NChatStringUtils.getRemoter(ctx);
 			channel.writeAndFlush("you are \""+who+"\".\n");
 		}
 		
 		// list
-		else if( StringUtils.equalsIgnoreCase(cmdOps[0], "/l") ) {
+		else if( NChatStringUtils.equalsIgnoreCaseIn(cmdOps[0], "/l", "/list") ) {
 			final Collection<Channel> clones = broadcaster.list();
 			final StringBuilder sb = new StringBuilder("there is ").append(clones.size()).append(" users online.\n");
 			for( Channel c : clones ) {
@@ -87,13 +86,13 @@ public class CommandHandler extends ChannelInboundHandlerAdapter {
 			channel.writeAndFlush(sb.toString()+(clones.isEmpty()?"\n":""));
 		}
 		
-		// who
-		else if( StringUtils.equalsIgnoreCase(cmdOps[0], "/?") ) {
+		// help
+		else if( NChatStringUtils.equalsIgnoreCaseIn(cmdOps[0], "/?", "/h", "/help") ) {
 			final StringBuilder sb = new StringBuilder();
-			sb.append(" >>/w  show who am I.\n");
-			sb.append(" >>/l  list the online user.\n");
-			sb.append(" >>/q  quit from this chat.\n");
-			sb.append(" >>/?  show the useage.\n");
+			sb.append(" >>/w /who     : show who am I.\n");
+			sb.append(" >>/l /list    : list the online user.\n");
+			sb.append(" >>/q /quit    : quit from this chat.\n");
+			sb.append(" >>/? /h /help : show the useage.\n");
 			channel.writeAndFlush("help for useage: \n"+sb.toString());
 		}
 		
