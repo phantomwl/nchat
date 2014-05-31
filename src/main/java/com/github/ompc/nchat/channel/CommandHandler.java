@@ -8,13 +8,11 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.util.Collection;
-import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.ompc.nchat.Broadcaster;
-import com.github.ompc.nchat.Talker;
 import com.github.ompc.nchat.util.NChatStringUtils;
 
 /**
@@ -97,7 +95,7 @@ public class CommandHandler extends ChannelInboundHandlerAdapter {
 		}
 		
 		else {
-			broadcaster.post(new Talker(new Date(), Talker.SYSTEM, "invalid command: "+cmdOps[0]+".\n"));
+			channel.writeAndFlush("invalid command: "+cmdOps[0]+".\n");
 			logger.info("invalid command: {}",cmdOps[0]);
 		}
 	}
