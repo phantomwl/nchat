@@ -1,10 +1,11 @@
 package com.github.ompc.nchat.util;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.net.InetSocketAddress;
 
 import org.apache.commons.lang.StringUtils;
-
-import io.netty.channel.ChannelHandlerContext;
 
 /**
  * 字符串操作工具类
@@ -20,6 +21,18 @@ public class NChatStringUtils {
 	 */
 	public static String getRemoter(ChannelHandlerContext ctx) {
 		final InetSocketAddress remote = (InetSocketAddress) ctx.channel().remoteAddress();
+		final StringBuilder sb = new StringBuilder();
+		sb.append(remote.getHostName()).append(":").append(remote.getPort());
+		return sb.toString();
+	}
+	
+	/**
+	 * 提取出远程访问者
+	 * @param ctx
+	 * @return
+	 */
+	public static String getRemoter(Channel channel) {
+		final InetSocketAddress remote = (InetSocketAddress) channel.remoteAddress();
 		final StringBuilder sb = new StringBuilder();
 		sb.append(remote.getHostName()).append(":").append(remote.getPort());
 		return sb.toString();

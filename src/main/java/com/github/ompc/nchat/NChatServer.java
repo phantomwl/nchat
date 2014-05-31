@@ -11,6 +11,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.timeout.IdleStateHandler;
 
 import java.nio.charset.Charset;
 
@@ -58,6 +59,7 @@ public class NChatServer {
 				.childHandler(new ChannelInitializer<SocketChannel>() { // (4)
 	                @Override
 	                public void initChannel(SocketChannel ch) throws Exception {
+	                	ch.pipeline().addLast(new IdleStateHandler(configer.getIdle(),configer.getIdle(),configer.getIdle()));
 	                	ch.pipeline().addLast(new StringDecoder(Charset.forName(configer.getCharset())));
 	                    ch.pipeline().addLast(new GatewayHandler(broadcaster));
 	                    ch.pipeline().addLast(new LineBasedFrameDecoder(2048));

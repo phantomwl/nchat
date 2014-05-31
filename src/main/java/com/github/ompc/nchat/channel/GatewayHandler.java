@@ -50,7 +50,7 @@ public class GatewayHandler extends ChannelInboundHandlerAdapter {
 	 */
 	private void showLogo(ChannelHandlerContext ctx) throws IOException {
 		final String logo = IOUtils.toString(getClass().getResourceAsStream("/nchat-logo.txt"));
-		ctx.channel().writeAndFlush(logo);
+		ctx.channel().writeAndFlush(logo+"\n");
 		broadcaster.post(new Talker(new Date(), Talker.SYSTEM, "Welcome sir.\n"));
 	}
 	

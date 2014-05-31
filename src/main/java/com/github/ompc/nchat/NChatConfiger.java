@@ -27,7 +27,17 @@ public class NChatConfiger {
 	 */
 	private String charset;
 	
+	/*
+	 * ³¬Ê±Ê±¼ä
+	 */
+	private int idle;
 	
+	public int getIdle() {
+		return idle;
+	}
+	public void setIdle(int idle) {
+		this.idle = idle;
+	}
 	public String getCharset() {
 		return charset;
 	}

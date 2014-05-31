@@ -3,7 +3,10 @@ package com.github.ompc.nchat;
 import io.netty.channel.Channel;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,6 +16,8 @@ import java.util.concurrent.ThreadFactory;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.ompc.nchat.util.NChatStringUtils;
 
 /**
  * 广播者
@@ -60,7 +65,10 @@ public class Broadcaster {
 					if( null == talker ) {
 						continue;
 					}
-					for(final Channel channel : channels) {
+					
+					final Iterator<Channel> it = channels.iterator();
+					while( it.hasNext() ) {
+						final Channel channel = it.next();
 						executors.execute(new Runnable(){
 
 							@Override
@@ -73,7 +81,13 @@ public class Broadcaster {
 								talkSB.append(sdf.format(talker.getOccectTime())).append(" ");
 								talkSB.append(talker.getAuthor()).append(">>");
 								talkSB.append(talker.getWords());
-								channel.writeAndFlush(talkSB.toString());
+								
+								try {
+									channel.writeAndFlush(talkSB.toString());
+								} catch(Throwable t) {
+									logger.warn("write talk to {} failed.", NChatStringUtils.getRemoter(channel), t);
+								}
+								
 							}
 							
 						});
@@ -117,6 +131,20 @@ public class Broadcaster {
 		synchronized (channels) {
 			channels.remove(channel);
 		}
+	}
+	
+	/**
+	 * 列出当前所有的用户
+	 * @return
+	 */
+	public List<Channel> list() {
+		final List<Channel> clones = new ArrayList<Channel>();
+		final Iterator<Channel> it = channels.iterator();
+		while( it.hasNext() ) {
+			final Channel channel = it.next();
+			clones.add(channel);
+		}
+		return clones;
 	}
 	
 }
